@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from groq import Groq
 import json
 from pathlib import Path
+from agents.coordinator import route_question
 
 load_dotenv()
 
@@ -50,7 +51,10 @@ if user_question.strip().lower() == "/reset":
     save_chat_history([])
     print("Conversation history cleared.")
     exit()
-    
+
+agent_type = route_question(user_question)
+print(f"\nSelected Agent: {agent_type}\n")
+
 chat_history.append({"role": "user", "content": user_question})
 save_chat_history(chat_history)
 
