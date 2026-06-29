@@ -16,3 +16,11 @@ def get_interview_system_prompt() -> str:
         - Give constructive feedback.
         - Evaluate both technical depth and communication.
     """
+
+def handle(question: str, chat_history: list):
+    return {
+        "agent_name": "interview",
+        "system_prompt": get_interview_system_prompt(),
+        "question": question,
+        "history": chat_history
+    }

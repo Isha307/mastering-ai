@@ -3,10 +3,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from groq import Groq
 import json
-from agents.coordinator import route_question
-from agents.sql_agent import get_sql_system_prompt
-from agents.beam_agent import get_beam_system_prompt
-from agents.interview_agent import get_interview_system_prompt
+from agents.coordinator import get_agent_response
 
 load_dotenv()
 
@@ -47,19 +44,13 @@ if user_question.strip().lower() == "/reset":
     print("Conversation history cleared.")
     exit()
 
-agent_type = route_question(user_question)
-agent_prompt = ""
+agent_data = get_agent_response(
+    user_question,
+    chat_history
+)
 
-if agent_type == "sql":
-    agent_prompt = get_sql_system_prompt()
-elif agent_type == "beam":
-    agent_prompt = get_beam_system_prompt()
-elif agent_type == "interview":
-    agent_prompt = get_interview_system_prompt()
-else:    
-    agent_prompt = "You are a helpful and knowledgeable Data Engineering Mentor. Answer the user's question to the best of your ability."     
-
-print(f"Selected Agent: {agent_type}")
+print(f"Selected Agent: {agent_data['agent_name']}")
+agent_prompt = agent_data["system_prompt"]
 MAX_HISTORY_MESSAGES = 10
 recent_history = chat_history[-MAX_HISTORY_MESSAGES:]
 

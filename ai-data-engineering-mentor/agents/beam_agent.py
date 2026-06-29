@@ -16,3 +16,11 @@ def get_beam_system_prompt() -> str:
         - Highlight shuffle-intensive operations.
         - Suggest cost and performance improvements.
     """
+
+def handle(question: str, chat_history: list):
+    return {
+        "agent_name": "beam",
+        "system_prompt": get_beam_system_prompt(),
+        "question": question,
+        "history": chat_history
+    }
