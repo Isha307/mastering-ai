@@ -1,3 +1,6 @@
+import os
+from groq import Groq
+
 def get_router_prompt():
     return """
 You are a routing agent.
@@ -43,3 +46,26 @@ def parse_route(response_text: str) -> str:
         return response_text
 
     return "general"
+
+def route_with_llm(question: str) -> str:
+    client = Groq(
+        api_key=os.getenv("GROQ_API_KEY")
+    )
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "system",
+                "content": get_router_prompt()
+            },
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
+    )
+
+    route = response.choices[0].message.content
+
+    return parse_route(route)

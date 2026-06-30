@@ -18,9 +18,23 @@ def get_interview_system_prompt() -> str:
     """
 
 def handle(question: str, chat_history: list):
+    interview_keywords = [
+        "interview",
+        "mock interview",
+        "take my interview",
+        "conduct interview"
+    ]
+
+    interview_mode = any(
+        keyword in question.lower()
+        for keyword in interview_keywords
+    )
+
+
     return {
         "agent_name": "interview",
         "system_prompt": get_interview_system_prompt(),
         "question": question,
-        "history": chat_history
+        "history": chat_history,
+        "interview_mode": interview_mode
     }

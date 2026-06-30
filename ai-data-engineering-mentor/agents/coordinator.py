@@ -1,39 +1,11 @@
 from agents.sql_agent import handle as sql_handle
 from agents.beam_agent import handle as beam_handle
 from agents.interview_agent import handle as interview_handle
+from agents.router_agent import route_with_llm
 ## Agent Orchestration
 
 def route_question(question: str) -> str:
-    question = question.lower()
-
-    if any(keyword in question for keyword in [
-        "sql",
-        "query",
-        "join",
-        "cte",
-        "window function"
-    ]):
-        return "sql"
-
-    if any(keyword in question for keyword in [
-        "beam",
-        "dataflow",
-        "side input",
-        "watermark",
-        "trigger",
-        "pcollection"
-    ]):
-        return "beam"
-
-    if any(keyword in question for keyword in [
-        "interview",
-        "mock interview",
-        "resume",
-        "faang"
-    ]):
-        return "interview"
-
-    return "general"
+    return route_with_llm(question)
 
 def get_agent_response(question: str, chat_history: list):
     agent_type = route_question(question)
